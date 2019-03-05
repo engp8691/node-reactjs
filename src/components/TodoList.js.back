@@ -1,0 +1,66 @@
+import React from 'react'
+import Footer from './Footer'
+import AddTodo from '../containers/AddTodo'
+import {addTodo} from '../actions';
+import VisibleTodoList from '../containers/VisibleTodoList'
+import './App.css';
+
+class App extends React.Component {
+	componentDidMount() {
+		let {store} = this.props;
+
+		//////
+		var myInit = {
+			method: 'GET',
+			headers:{
+				'Content-Type': 'application/json',
+				'x-auth': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1Yzc4YmMxM2VmMWZmMjFiZTk1ZTk1YTYiLCJhY2Nlc3MiOiJhdXRoIiwiaWF0IjoxNTUxNTg5MDc0fQ.vk0-ZsXbMRQvV2qgi0CJFgjiRmFflllPD052ztjZORo'
+  			},
+			mode: 'cors',
+			cache: 'default'
+		};
+
+
+		fetch('http://rtc.netbriefings.com:3000/todos', myInit).then(function(response) {
+			console.log(26, response);
+		});
+
+		/*
+		axios.get(`./todos.json`).then(res => {
+			console.log(13, res.data);
+			// let todos = JSON.parse(res.data);
+			let todos = res.data.todos;
+
+			if(todos.length>0){
+				todos.map((elem)=>{
+					let desc = elem.desc;
+					store.dispatch(addTodo(desc));
+
+					return desc;
+				});
+			}else{
+				store.dispatch(addTodo("起床"));
+				store.dispatch(addTodo("洗漱"));
+			}
+		}).catch(function (error) {
+			store.dispatch(addTodo("起床"));
+			store.dispatch(addTodo("洗漱"));
+		});
+		*/
+	}
+
+	render(){
+		let {store} = this.props;
+
+		return (
+			<div>
+				<AddTodo />
+				<VisibleTodoList store={store} />
+				<Footer store={store} />
+			</div>
+		);
+	}
+}
+
+export default App
+
