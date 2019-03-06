@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import axios from 'axios';
 
 import {addTodo} from '../actions';
 
@@ -17,7 +16,6 @@ class TodoList extends React.Component {
 
 	componentDidMount() {
 		const token = sessionStorage.getItem('x-auth');
-		console.log(19, token);
 
 		var myInit = {
             method: 'GET',
@@ -33,32 +31,18 @@ class TodoList extends React.Component {
 			return res.json();
 		}).then((responseData, err) => {
 			if(responseData.todos && responseData.todos.length>0){
-				console.log(33, responseData.todos.length, responseData.todos);
 				responseData.todos.forEach(aThing=>{
-					console.log(35, aThing.text);
-					this.props.toAddTodo(aThing.text);
+					console.log(35, aThing);
+
+					this.props.toAddTodo({
+						_id: aThing._id,
+						text: aThing.text,
+						completed: aThing.completed,
+						completedAt: aThing.completedAt,
+						_creator: aThing._creator
+					});
 				});
 			}
-		});
-
-		axios.get(`./todos.json`).then(res => {
-			console.log(13, res.data);
-			// let todos = JSON.parse(res.data);
-			let todos = res.data.todos;
-
-			if(todos.length>0){
-				todos.map((elem)=>{
-					let desc = elem.desc;
-					this.props.toAddTodo(desc);
-
-					return desc;
-				});
-			}else{
-				this.props.toAddTodo("起床");
-				this.props.toAddTodo("洗漱");
-			}
-		}).catch(function (error) {
-			console.log(error);
 		});
 	}
 	

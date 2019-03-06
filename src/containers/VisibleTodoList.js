@@ -3,10 +3,15 @@ import { connect } from 'react-redux'
 import { toggleTodo } from '../actions'
 import { VisibilityFilterTypes } from '../actions'
 
-const Todo = ({ onClick, completed, text }) => (
+
+const Todo = ({ onClick, _id, text, completed, completedAt, _creator }) => (
 	<li
-		onClick={onClick}
-		style={{
+		data-todo-_id = {_id}
+		data-todo-completed = {completed}
+		data-todo-completedAt = {completedAt}
+		data-todo-_creator = {_creator}
+		onClick = {onClick}
+		style = {{
 			textDecoration: completed ? 'line-through' : 'none'
 		}}
 	>
@@ -17,11 +22,10 @@ const Todo = ({ onClick, completed, text }) => (
 const VisibleTodoList = ({todo_elems, toggleTodo}) => {
 	return (
 	<ul>
-		{todo_elems.map(todo =>
-			<Todo
-				key={todo.id}
+		{todo_elems.map(todo =><Todo
+				key={todo._id}
 				{...todo}
-				onClick={() => toggleTodo(todo.id)}
+				onClick={() => toggleTodo(todo._id, todo.completed)}
 			/>
 		)}
 	</ul>
@@ -53,7 +57,30 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = dispatch => ({
-	toggleTodo: id => dispatch(toggleTodo(id))
+	toggleTodo: (_id, completed) => {
+		const token = sessionStorage.getItem('x-auth');
+
+		const data = JSON.stringify({_id: _id, completed: !completed});
+
+		var myInit = {
+			method: 'PATCH',
+			headers:{
+				'Content-Type': 'application/json',
+				'x-auth': token
+			},
+			body: data,
+			mode: 'cors',
+			cache: 'default'
+		};
+
+		fetch(`/todo/${_id}`, myInit).then(res => {
+			return res.json();
+		}).then((responseData, err) => {
+			console.log(80, responseData, err);
+		});
+
+		return dispatch(toggleTodo(_id, completed));
+	}
 })
 
 export default connect(

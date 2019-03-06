@@ -21,8 +21,44 @@ const AddTodo = (props) => {
 				if (!textInput.value.trim()) {
 					return
 				}
-				dispatch(addTodo(textInput.value));
-				textInput.value = ''
+
+				const token = sessionStorage.getItem('x-auth');
+				console.log(25, token);
+
+				const text = textInput.value.trim();
+
+				var myInit = {
+					method: 'POST',
+					headers:{
+						'Content-Type': 'application/json',
+						'x-auth': token
+					},
+					body: JSON.stringify({text}),
+					mode: 'cors',
+					cache: 'default'
+				};
+
+				fetch('/todos', myInit).then(res => {
+					console.log(42, res);
+					return res.json();
+				}).then((responseData, err) => {
+					if(responseData.errors){
+						if(responseData.errors.text.message){
+							alert(responseData.errors.text.message);
+						}
+					}else{
+						textInput.value = '';
+						console.log(50, responseData);
+
+						dispatch(addTodo({
+							_id: responseData._id,
+							text: responseData.text,
+							completed: responseData.completed,
+							completedAt: responseData.completedAt,
+							_creator: responseData._creator
+						}));
+					}
+				});
 			}}>
 
 			<input type="text" ref={(txt)=>{textInput=txt;}} />
