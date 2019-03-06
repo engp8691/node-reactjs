@@ -17,6 +17,11 @@ export const toggleTodo = (_id) => ({
   _id
 })
 
+export const deleteTodo = (_id) => ({
+  type: 'DELETE_TODO',
+  _id
+})
+
 export const VisibilityFilterTypes = {
   SHOW_ALL: 'SHOW_ALL',
   SHOW_COMPLETED: 'SHOW_COMPLETED',
