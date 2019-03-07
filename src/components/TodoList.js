@@ -16,6 +16,7 @@ class TodoList extends React.Component {
 
 	componentDidMount() {
 		const token = sessionStorage.getItem('x-auth');
+		console.log(19, token);
 
 		var myInit = {
             method: 'GET',
@@ -28,25 +29,41 @@ class TodoList extends React.Component {
         };
 
         fetch('/todos', myInit).then(res => {
-			return res.json();
-		}).then((responseData, err) => {
-			if(responseData.todos && responseData.todos.length>0){
-				responseData.todos.forEach(aThing=>{
-					console.log(35, aThing);
-
-					this.props.toAddTodo({
-						_id: aThing._id,
-						text: aThing.text,
-						completed: aThing.completed,
-						completedAt: aThing.completedAt,
-						_creator: aThing._creator
-					});
-				});
+			console.log(32, res);
+			if(res.status === 401){
+				return Promise.reject();
+			}else{
+				return res.json();
 			}
+		}).then((responseData, err) => {
+			console.log(35, responseData, err);
+
+			if(!err){
+				if(responseData.todos && responseData.todos.length>0){
+					responseData.todos.forEach(aThing=>{
+						console.log(35, aThing);
+
+						this.props.toAddTodo({
+							_id: aThing._id,
+							text: aThing.text,
+							completed: aThing.completed,
+							completedAt: aThing.completedAt,
+							_creator: aThing._creator
+						});
+					});
+				}
+			}else{
+				console.log(56, "Please log me out");
+			}
+		}).catch(e=>{
+			console.log(59, e);
+			this.props.history.push("/");
 		});
 	}
 	
 	render(){
+		console.log(66, "Componet refresh");
+
 		return (
 			<div>
 				<AddTodo />
@@ -59,7 +76,7 @@ class TodoList extends React.Component {
 
 const mapDispatchToProps = dispatch => {
     return {
-        toAddTodo: (sth) => dispatch(addTodo(sth)),
+        toAddTodo: (sth) => dispatch(addTodo(sth))
     }
 }
 

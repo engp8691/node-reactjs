@@ -5,7 +5,7 @@ import './App.css'
 
 const Footer = () => (
 	<div>
-		<span className="note">*触摸事项变更完成状态，完成事项加画横线</span>
+		<br/>
 		<br/>
 		<span>显示: </span>
 		<FilterLink filter={VisibilityFilterTypes.SHOW_ALL}>

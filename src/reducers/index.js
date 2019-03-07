@@ -2,7 +2,7 @@ import { VisibilityFilterTypes } from '../actions'
 import { combineReducers } from 'redux'
 
 const todos = (state = [], action) => {
-	// console.log(5, "todos: ", action);
+	console.log(5, "todos: ", action);
 
 	switch (action.type) {
 		case 'ADD_TODO':
@@ -24,10 +24,30 @@ const todos = (state = [], action) => {
 					_creator: action._creator
 				}
 			]
+
+		case 'DELETE_TODO':
+			
+			if(!action._id){
+				return state;
+			}
+
+			const array = [...state];
+
+			var filtered = array.filter(function(todo, index, arr){
+    			return todo._id !== action._id;
+			});
+
+			return [ ...filtered]; 
+
 		case 'TOGGLE_TODO':
-			return state.map(todo =>
-				(todo._id === action._id) ? {...todo, completed: !todo.completed} : todo
-			)
+			return state.map((todo) =>{
+				let completedAt = Date.now();
+				if(todo.completed){
+					completedAt = null; 
+				}
+
+				return ((todo._id === action._id) ? {...todo, completed: !todo.completed, completedAt} : todo);
+			});
 		default:
 			return state
 	}
