@@ -74,11 +74,17 @@ class TodoList extends React.Component {
 	}
 }
 
+const mapStateToProps = (state) => {
+    console.log(78, state);
+
+	return {...state.todos};
+}
+
 const mapDispatchToProps = dispatch => {
     return {
         toAddTodo: (sth) => dispatch(addTodo(sth))
     }
 }
 
-export default connect(null, mapDispatchToProps)(TodoList);
+export default connect(mapStateToProps, mapDispatchToProps)(TodoList);
 

@@ -16,6 +16,41 @@ class Login extends Component {
 		this.onPasswordChange = this.onPasswordChange.bind(this);
     }
 
+	componentDidMount() {
+		const token = sessionStorage.getItem('x-auth');
+
+		var myInit = {
+			method: 'DELETE',
+			headers:{
+				'Content-Type': 'application/json',
+				'x-auth': token
+			},
+			mode: 'cors',
+			cache: 'default'
+		};
+
+		fetch('/find/me/token', myInit).then(res => {
+			if(res.status === 200){
+				console.log(34, res);
+				sessionStorage.setItem("x-auth", "");
+				return res.json();
+			}else{
+				if(res.status === 401){
+					console.log(34, res);
+					return Promise.reject(res.statusText);
+				}else{
+					return Promise.resolve();
+				}
+			}
+		}).then((responseData, err) => {
+			console.log(89, responseData);
+		}).catch((e)=>{
+			console.log(91, e);
+		});
+
+		sessionStorage.setItem("x-auth", "");
+	}
+
 	onSubmit(e) {
 		e.preventDefault();
 		const data = JSON.stringify(this.state);

@@ -100,10 +100,10 @@ const getVisibleTodos = (todo_elems, filter) => {
 }
 
 const mapStateToProps = (state) => {
-	// console.log(44, state);
+	console.log(103, state);
 
 	// The state has todos and visibilityFiler fields because
-	// reducers = combineReducers({todos, visibilityFilter});
+	// reducers = combineReducers({todos, visibilityFilter, logout});
 	return ({
 		todo_elems: getVisibleTodos(state.todos, state.visibilityFilter)
 	});

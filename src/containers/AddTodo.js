@@ -39,8 +39,11 @@ const AddTodo = (props) => {
 				};
 
 				fetch('/todos', myInit).then(res => {
-					console.log(42, res);
-					return res.json();
+					if(res.status === 401){
+						return Promise.reject();
+					}else{
+						return res.json();
+					}
 				}).then((responseData, err) => {
 					if(responseData.errors){
 						if(responseData.errors.text.message){
@@ -58,6 +61,9 @@ const AddTodo = (props) => {
 							_creator: responseData._creator
 						}));
 					}
+				}).catch(e=>{
+					console.log(65, e);
+					// props.history.push("/");
 				});
 			}}>
 

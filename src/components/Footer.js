@@ -17,6 +17,9 @@ const Footer = () => (
 		<FilterLink filter={VisibilityFilterTypes.SHOW_COMPLETED}>
 			已经完成
 		</FilterLink>
+
+		<a href="/"> <button style={{marginLeft: '4px'}}> 退出 </button></a>
+
 	</div>
 )
 

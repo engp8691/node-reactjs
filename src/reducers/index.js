@@ -54,8 +54,6 @@ const todos = (state = [], action) => {
 }
 
 const visibilityFilter = (state = VisibilityFilterTypes.SHOW_ALL, action) => {
-	// console.log(27, "visibilityFilter: ", action);
-
 	switch (action.type) {
 		case 'SET_VISIBILITY_FILTER':
 			return action.filter
@@ -64,7 +62,16 @@ const visibilityFilter = (state = VisibilityFilterTypes.SHOW_ALL, action) => {
 	}
 }
 
-const reducers = combineReducers({todos, visibilityFilter});
+const logout = (state = "logout", action) => {
+	switch (action.type) {
+		case 'LOGOUT':
+			return "logout";
+		default:
+			return "login";
+	}
+}
+
+const reducers = combineReducers({todos, visibilityFilter, logout});
 
 export default reducers;
 
